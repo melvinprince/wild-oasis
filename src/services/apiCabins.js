@@ -51,6 +51,8 @@ export async function createEditCabin(newCabin, id) {
 
   //***NEED TO ADD A FEATURE TO DELETE OLD IMAGE IF UPLOADING NEW ONE***
   //UPLOADING IMAGE ONLY IF ITS NEW
+  if (hasImagePath) return data;
+
   if (!hasImagePath) {
     const { error: storageError } = await supabase.storage
       .from("cabin-images")
