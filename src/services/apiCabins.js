@@ -20,10 +20,8 @@ export async function deletCabin(id) {
   return data;
 }
 
-//CREATE AND EDIT CABIN DETAILS
-export async function createEditCabin(newCabin, id) {
-  console.log(newCabin, id);
-
+//CREATE AND UPDATE CABIN DETAILS
+export async function createUpdateCabin(newCabin, id) {
   //SETTING IMAGE NAME AND PATH
   const hasImagePath = newCabin.image?.startsWith?.(supabaseUrl);
   const imageName = `${Math.random() * 10}-${newCabin.image.name}`.replaceAll(
@@ -40,7 +38,7 @@ export async function createEditCabin(newCabin, id) {
   //CREATE DATA
   if (!id) query = query.insert([{ ...newCabin, image: imagePath }]);
 
-  //EDIT DATA
+  //UPDATE DATA
   if (id) query = query.update({ ...newCabin, image: imagePath }).eq("id", id);
 
   const { data, error } = await query.select().single();
