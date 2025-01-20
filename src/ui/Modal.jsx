@@ -1,7 +1,8 @@
 import { cloneElement, createContext, useContext, useState } from "react";
 import { createPortal } from "react-dom";
-import { HiOutlineX } from "react-icons/hi";
 import styled from "styled-components";
+import { HiOutlineX } from "react-icons/hi";
+import { useOutsideClick } from "../hooks/useOutsideClick";
 
 const StyledModal = styled.div`
   position: fixed;
@@ -74,12 +75,12 @@ function Open({ children, opens: openWindowName }) {
 
 function Window({ children, name }) {
   const { openName, close } = useContext(ModalContext);
-
+  const ref = useOutsideClick({ handler: close });
   if (openName !== name) return null;
 
   return createPortal(
     <Overlay>
-      <StyledModal>
+      <StyledModal ref={ref}>
         <Button onClick={close}>
           <HiOutlineX />
         </Button>
