@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useState } from "react";
 
 import CreateCabinForm from "./CreateCabinForm";
 import { useDeleteCabin } from "./useDeleteCabin";
@@ -10,6 +9,8 @@ import {
   HiOutlineTrash,
 } from "react-icons/hi";
 import { useCreateCabin } from "./useCreateCabin";
+import Modal from "../../ui/Modal";
+import ConfirmDelete from "../../ui/ConfirmDelete";
 
 const TableRow = styled.div`
   display: grid;
@@ -51,7 +52,6 @@ const Discount = styled.div`
 `;
 
 function CabinRow({ cabin }) {
-  const [showForm, setShowForm] = useState(false);
   const { isDeleting, deleteCabin } = useDeleteCabin();
   const { isCreating, createCabin } = useCreateCabin();
 
@@ -75,31 +75,44 @@ function CabinRow({ cabin }) {
   }
 
   return (
-    <>
-      <TableRow>
-        <Img src={image} alt="Loading Failed" />
-        <Cabin>{name}</Cabin>
-        <Cabin>{maxCapacity}</Cabin>
-        <Price>{formatCurrency(regularPrice)}</Price>
-        {discount ? (
-          <Discount>{formatCurrency(discount)}</Discount>
-        ) : (
-          <span>&mdash;</span>
-        )}
-        <div>
-          <button onClick={() => handleDuplicate()} disabled={isCreating}>
-            <HiOutlineDuplicate />
-          </button>
-          <button onClick={() => setShowForm((showForm) => !showForm)}>
-            <HiOutlinePencilAlt />
-          </button>
-          <button onClick={() => deleteCabin(cabinId)} disabled={isDeleting}>
-            <HiOutlineTrash />
-          </button>
-        </div>
-      </TableRow>
-      {showForm && <CreateCabinForm cabinToUpdate={cabin} />}
-    </>
+    <TableRow>
+      <Img src={image} alt="Loading Failed" />
+      <Cabin>{name}</Cabin>
+      <Cabin>{maxCapacity}</Cabin>
+      <Price>{formatCurrency(regularPrice)}</Price>
+      {discount ? (
+        <Discount>{formatCurrency(discount)}</Discount>
+      ) : (
+        <span>&mdash;</span>
+      )}
+      <div>
+        <button onClick={() => handleDuplicate()} disabled={isCreating}>
+          <HiOutlineDuplicate />
+        </button>
+        <Modal>
+          <Modal.Open opens="edit">
+            <button>
+              <HiOutlinePencilAlt />
+            </button>
+          </Modal.Open>
+          <Modal.Window name="edit">
+            <CreateCabinForm cabinToUpdate={cabin} />
+          </Modal.Window>
+          <Modal.Open opens="delete">
+            <button>
+              <HiOutlineTrash />
+            </button>
+          </Modal.Open>
+          <Modal.Window name="delete">
+            <ConfirmDelete
+              resourceName={"cabins"}
+              disabled={isDeleting}
+              onConfirm={() => deleteCabin(cabinId)}
+            />
+          </Modal.Window>
+        </Modal>
+      </div>
+    </TableRow>
   );
 }
 
