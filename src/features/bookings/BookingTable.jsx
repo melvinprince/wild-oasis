@@ -1,9 +1,17 @@
 import BookingRow from "./BookingRow";
-import Table from "../../ui/Table";
+import Spinner from "../../ui/Spinner";
 import Menus from "../../ui/Menus";
+import Table from "../../ui/Table";
+import Empty from "../../ui/Empty";
+
+import { useBookings } from "./useBookings";
+import { useSearchParams } from "react-router-dom";
 
 function BookingTable() {
-  const bookings = [];
+  const { isPending, bookings } = useBookings();
+
+  if (isPending) return <Spinner />;
+  if (!bookings) return <Empty resourceName="Bookings" />;
 
   return (
     <Menus>
