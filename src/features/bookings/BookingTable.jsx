@@ -4,11 +4,11 @@ import Menus from "../../ui/Menus";
 import Table from "../../ui/Table";
 import Empty from "../../ui/Empty";
 
+import Pagination from "../../ui/Pagination";
 import { useBookings } from "./useBookings";
-import { useSearchParams } from "react-router-dom";
 
 function BookingTable() {
-  const { isPending, bookings } = useBookings();
+  const { isPending, bookings, count } = useBookings();
 
   if (isPending) return <Spinner />;
   if (!bookings) return <Empty resourceName="Bookings" />;
@@ -31,6 +31,9 @@ function BookingTable() {
             <BookingRow key={booking.id} booking={booking} />
           )}
         />
+        <Table.Footer>
+          <Pagination count={count} />
+        </Table.Footer>
       </Table>
     </Menus>
   );
