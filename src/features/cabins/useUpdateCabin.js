@@ -15,7 +15,7 @@ export function useUpdateCabin() {
     },
     onError: (err) => {
       console.error(err);
-      toast.error("Failed to create");
+      toast.error("Failed to update");
     },
   });
   return { isUpdating, updateCabin };
